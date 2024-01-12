@@ -30,13 +30,14 @@ class Snake:
 class Food:
     def __init__(self):
 
-        x= random.randint(0,(GAME_WIDTH /SPACE_SIZE)-1)*SPACE_SIZE
-        y= random.randint(0,(GAME_HEIGHT /SPACE_SIZE)-1)*SPACE_SIZE
+        x= random.randint(0,int(GAME_WIDTH /SPACE_SIZE)-1)*SPACE_SIZE
+        y= random.randint(0,int(GAME_HEIGHT /SPACE_SIZE)-1)*SPACE_SIZE
 
         self.coordinates=[x,y]
         canvas.create_oval(x,y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR,tag="food")
 
 def setup_game():
+    window.unbind('<space>')
     global snake, food, direction
     snake = Snake()
     food = Food()
@@ -126,6 +127,16 @@ def game_over():
     canvas.delete(ALL)
     canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
                        font=('consolas',70), text="GAME OVER",fill="red",tag="gameover")
+    canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2 + 100,
+                       font=('consolas',20), text="Press Space to restart",fill="white",tag="gameover")
+    window.bind('<space>', lambda event: restart_game())
+
+def restart_game():
+    global score
+    score = 0
+    label.config(text="Score:{}".format(score))
+    canvas.delete("gameover")
+    setup_game()
     
 
 window= Tk()
